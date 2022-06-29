@@ -56,3 +56,6 @@ while(cap.isOpened()):
 # The following frees up resources and closes all windows
 cap.release()
 cv.destroyAllWindows()
+
+
+

@@ -70,24 +70,28 @@ lk_params = dict(winSize = (15,15), maxLevel = 2, criteria = (cv.TERM_CRITERIA_E
 cap = cv.VideoCapture("shibuya.mp4")
 color = (0, 250, 0)
 # ret = a boolean return value from getting the frame, first_frame = the first frame in the entire video sequence///
-# change cap to reading the pgm file
+# change cap to read the pgm file
 ret, first_frame = cap.read()
 # Converts frame to grayscale because we only need the luminance channel for detecting edges - less computationally expensive////
 # change this syntax to convert a photo to grayscale
 prev_gray = cv.cvtColor(first_frame, cv.COLOR_BGR2GRAY)
 # Finds the strongest corners in the first frame by Shi-Tomasi method - we will track the optical flow for these corners
-# https://docs.opencv.org/3.0-beta/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack
+# https://docs.opencv.org/3.0-beta/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack////
+#does this work with a single photo
 prev = cv.goodFeaturesToTrack(prev_gray, mask = None, **feature_params)
-# Creates an image filled with zero intensities with the same dimensions as the frame - for later drawing purposes
 mask = np.zeros_like(first_frame)
 
+#check if isOpened() works with photos
 while(cap.isOpened()):
     # ret = a boolean return value from getting the frame, frame = the current frame being projected in the video
+    # check read() function on photos
     ret, frame = cap.read()
     # Converts each frame to grayscale - we previously only converted the first frame to grayscale
+    # same thing as above
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     # Calculates sparse optical flow by Lucas-Kanade method
     # https://docs.opencv.org/3.0-beta/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowpyrlk
+    # above
     prev = cv.goodFeaturesToTrack(prev_gray, mask = None, **feature_params)
     next, status, error = cv.calcOpticalFlowPyrLK(prev_gray, gray, prev, None, **lk_params)
     # Selects good feature points for previous position
